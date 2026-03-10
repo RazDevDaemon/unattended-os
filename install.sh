@@ -248,14 +248,17 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 echo "sudo configured for wheel group"
 
 # ── Passwords ─────────────────────────────────────────────
-echo "root:${ROOT_HASH}" | chpasswd -e
-echo "${USERNAME}:${USER_HASH}" | chpasswd -e
-echo "Passwords set"
+echo "Passwords will be set after chroot script exits"
 EOF
 
 chmod +x /mnt/root/chroot-setup.sh
 arch-chroot /mnt /root/chroot-setup.sh
 rm /mnt/root/chroot-setup.sh
+
+# Set passwords directly — avoids $6$ hash interpretation issues inside chroot
+echo "root:${ROOT_HASH}" | arch-chroot /mnt chpasswd -e
+echo "${USERNAME}:${USER_HASH}" | arch-chroot /mnt chpasswd -e
+log "Passwords set"
 
 log "Chroot configuration complete"
 
