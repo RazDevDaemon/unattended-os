@@ -56,10 +56,6 @@ USERGROUPS=$(cfg '.user.groups')
 ROOT_HASH=$(openssl passwd -6 "$(cfg '.root.password')")
 USER_HASH=$(openssl passwd -6 "$(cfg '.user.password')")
 
-# Hash passwords at runtime — never stored as plaintext in memory beyond this point
-ROOT_HASH=$(openssl passwd -6 "$(cfg '.root.password')")
-USER_HASH=$(openssl passwd -6 "$(cfg '.user.password')")
-
 # Kernels as space-separated string
 KERNELS=$(cfg '.system.kernels[]' | tr '\n' ' ')
 
@@ -213,9 +209,10 @@ log "fstab generated"
 # ── chroot configuration ─────────────────────────────────────
 section "Configuring system (chroot)"
 
-# We write a secondary script that runs inside the chroot
-# and pass all variables into it via the environment
-arch-chroot /mnt /bin/bash <<CHROOT
+# Write a script into the new system and execute it
+# This avoids heredoc variable expansion issues with hashed passwords ($6$...)
+cat > /mnt/root/chroot-setup.sh <<EOF
+#!/bin/bash
 set -euo pipefail
 
 # ── Timezone ──────────────────────────────────────────────
@@ -254,8 +251,11 @@ echo "sudo configured for wheel group"
 echo "root:${ROOT_HASH}" | chpasswd -e
 echo "${USERNAME}:${USER_HASH}" | chpasswd -e
 echo "Passwords set"
+EOF
 
-CHROOT
+chmod +x /mnt/root/chroot-setup.sh
+arch-chroot /mnt /root/chroot-setup.sh
+rm /mnt/root/chroot-setup.sh
 
 log "Chroot configuration complete"
 
