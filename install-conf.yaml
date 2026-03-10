@@ -43,9 +43,10 @@ packages:
 
 # --- User ---------------------------------------------------
 user:
-  name:   raz
-  groups: wheel
-  password: "<tbd>"
+  name:     raz
+  groups:   wheel
+  password: "changeme"
 
+# --- Root ---------------------------------------------------
 root:
-  password: "<tbd>"
+  password: "changeme"

@@ -52,6 +52,14 @@ HOSTNAME=$(cfg '.system.hostname')
 USERNAME=$(cfg '.user.name')
 USERGROUPS=$(cfg '.user.groups')
 
+# Hash passwords before chroot — config file won't be accessible inside
+ROOT_HASH=$(openssl passwd -6 "$(cfg '.root.password')")
+USER_HASH=$(openssl passwd -6 "$(cfg '.user.password')")
+
+# Hash passwords at runtime — never stored as plaintext in memory beyond this point
+ROOT_HASH=$(openssl passwd -6 "$(cfg '.root.password')")
+USER_HASH=$(openssl passwd -6 "$(cfg '.user.password')")
+
 # Kernels as space-separated string
 KERNELS=$(cfg '.system.kernels[]' | tr '\n' ' ')
 
@@ -243,16 +251,9 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 echo "sudo configured for wheel group"
 
 # ── Passwords ─────────────────────────────────────────────
-echo "--------------------------------------"
-echo "Setting password for root: "
-ROOT_PASS=$(cfg '.root.password')
-echo "root:$(openssl passwd -6 "$ROOT_PASS")" | chpasswd -e
-echo "Password set for root"
-echo "--------------------------------------"
-echo "Setting password for ${USERNAME}: "
-USER_PASS=$(cfg '.user.password')
-echo "${USERNAME}:$(openssl passwd -6 "$USER_PASS")" | chpasswd -e
-echo "Password set for ${USERNAME}"
+echo "root:${ROOT_HASH}" | chpasswd -e
+echo "${USERNAME}:${USER_HASH}" | chpasswd -e
+echo "Passwords set"
 
 CHROOT
 
