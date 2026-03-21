@@ -5,6 +5,15 @@
 # Default config: install.conf.yaml
 # ============================================================
 
+UNATTENDED=false
+
+# parse arguments
+for arg in "$@"; do
+  case $arg in
+    --unattended) UNATTENDED=true ;;
+  esac
+done
+
 set -euo pipefail  # strict mode — exit on error, unset var, pipe failure
 
 # ── Colours ─────────────────────────────────────────────────
@@ -94,8 +103,12 @@ log "Target disk: $DISK"
 
 # Warn user — this is destructive
 warn "ALL DATA ON $DISK WILL BE DESTROYED"
-read -rp "Type 'yes' to continue: " CONFIRM
-[[ "$CONFIRM" == "yes" ]] || error "Aborted by user"
+if [[ "$UNATTENDED" == false ]]; then
+  read -rp "Type 'yes' to continue: " CONFIRM
+  [[ "$CONFIRM" == "yes" ]] || error "Aborted by user"
+else
+  warn "Unattended mode — skipping confirmation"
+fi
 
 # ── Partition ───────────────────────────────────────────────
 section "Partitioning $DISK"
