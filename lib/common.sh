@@ -12,7 +12,15 @@ error()   { echo -e "${RED}[✗]${NC} $*" >&2; exit 1; }
 section() { echo -e "\n${CYAN}══ $* ══${NC}"; }
 
 # ── State tracking ───────────────────────────────────────────
-STATE_FILE="/mnt/install-state"
+STATE_FILE="/tmp/install-state"
+
+# called after do_mount inside run_stage
+migrate_state() {
+  if [[ -f "/tmp/install-state" ]]; then
+    cp /tmp/install-state /mnt/install-state
+    STATE_FILE="/mnt/install-state"
+  fi
+}
 
 stage_done() {
   grep -q "^${1}$" "$STATE_FILE" 2>/dev/null
@@ -24,13 +32,20 @@ mark_done() {
 
 run_stage() {
   local stage=$1
-  local fn=$2
+  shift
+  local fns=("$@")
 
   if stage_done "$stage"; then
     log "Skipping '$stage' — already completed"
     return
   fi
 
-  $fn
+  for fn in "${fns[@]}"; do
+    $fn
+  done
+
   mark_done "$stage"
+
+  # migrate state to disk after partitioning stage
+  [[ "$stage" == "partitioning" ]] && migrate_state
 }

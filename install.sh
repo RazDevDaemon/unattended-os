@@ -67,18 +67,11 @@ else
 fi
 
 # ── Run stages ───────────────────────────────────────────────
-if [[ -f "/mnt/install-state" ]] && mountpoint -q /mnt; then
-  log "State file found and disk mounted — skipping partition/format/mount"
-else
-  do_partition
-  do_format
-  do_mount
-fi
-
-run_stage "pacstrap"    do_pacstrap
-run_stage "fstab"       do_fstab
-run_stage "chroot"      do_chroot
-run_stage "bootloader"  do_bootloader
+run_stage "partitioning" do_partition do_format do_mount
+run_stage "pacstrap"     do_pacstrap
+run_stage "fstab"        do_fstab
+run_stage "chroot"       do_chroot
+run_stage "bootloader"   do_bootloader
 
 # ── Done ─────────────────────────────────────────────────────
 section "Installation complete"
