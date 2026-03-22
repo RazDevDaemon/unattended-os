@@ -22,11 +22,6 @@ log()     { echo -e "${GREEN}[+]${NC} $*"; }
 error()   { echo -e "${RED}[✗]${NC} $*" >&2; exit 1; }
 section() { echo -e "\n${CYAN}══ $* ══${NC}"; }
 
-# ── Secrets file ─────────────────────────────────────────────
-section "Baking in secrets"
-[[ -f "install-secrets.yaml" ]] || error "install-secrets.yaml not found"
-cp install-secrets.yaml "$PROFILE_DIR/airootfs/root/unattended-os/install-secrets.yaml"
-
 # ── Checks ──────────────────────────────────────────────────
 [[ $EUID -eq 0 ]] || error "Must run as root"
 command -v pacman &>/dev/null || error "This script must run on Arch Linux"
@@ -47,6 +42,12 @@ wget "$YQ_URL" -O "$PROFILE_DIR/airootfs/usr/local/bin/yq"
 # ── Repo ────────────────────────────────────────────────────
 section "Cloning repo into ISO"
 git clone "$REPO_URL" "$PROFILE_DIR/airootfs/root/unattended-os"
+
+# ── Secrets file ─────────────────────────────────────────────
+section "Baking in secrets"
+[[ -f "/root/install-secrets.yaml" ]] || error "Secrets file not found at /root/install-secrets.yaml — mount it with -v"
+cp /root/install-secrets.yaml "$PROFILE_DIR/airootfs/root/unattended-os/install-secrets.yaml"
+log "Secrets baked in"
 
 # ── Permissions ─────────────────────────────────────────────
 section "Setting file permissions"

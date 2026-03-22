@@ -7,7 +7,7 @@ Before=getty@tty1.service
 
 [Service]
 Type=oneshot
-ExecStart=/root/unattended-os/install.sh /root/unattended-os/install-conf.yaml --unattended
+ExecStart=/root/unattended-os/install.sh /root/unattended-os/install-conf.yaml /root/unattended-os/install-secrets.yaml --unattended
 StandardOutput=journal+console
 StandardError=journal+console
 Restart=on-failure
