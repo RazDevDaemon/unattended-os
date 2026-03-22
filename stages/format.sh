@@ -34,6 +34,7 @@ do_format() {
   fi
 
   # ── Swap ──────────────────────────────────────────────
+  swapoff "$PART_SWAP" 2>/dev/null || true   # deactivate if in use
   if [[ "$LUKS_ENABLED" == "true" && "$LUKS_SWAP" == "true" ]]; then
     echo -n "$LUKS_PASSPHRASE" | cryptsetup luksFormat "$PART_SWAP" -
     echo -n "$LUKS_PASSPHRASE" | cryptsetup open "$PART_SWAP" cryptswap -
