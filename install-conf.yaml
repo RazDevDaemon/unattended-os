@@ -20,6 +20,16 @@ filesystems:
 mounts:
   media: /mnt/media
 
+# --- Encryption ---------------------------------------------
+encryption:
+  enabled: true
+  passphrase: "changeme"
+  partitions:
+    root:   true
+    home:   true
+    swap:   true
+    media:  false
+
 # --- Locale & timezone --------------------------------------
 locale:
   lang:     en_US.UTF-8
@@ -40,7 +50,7 @@ packages:
   - grub
   - efibootmgr
   - os-prober
-
+  - cryptsetup
 # --- User ---------------------------------------------------
 user:
   name:     raz

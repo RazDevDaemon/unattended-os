@@ -23,6 +23,12 @@ load_config() {
   USER_HASH=$(openssl passwd -6 "$(cfg '.user.password')")
   KERNELS=$(cfg '.system.kernels[]' | tr '\n' ' ')
   EXTRA_PACKAGES=$(cfg '.packages[]' | tr '\n' ' ')
+  LUKS_ENABLED=$(cfg '.encryption.enabled')
+  LUKS_PASSPHRASE=$(cfg '.encryption.passphrase')
+  LUKS_ROOT=$(cfg '.encryption.partitions.root')
+  LUKS_HOME=$(cfg '.encryption.partitions.home')
+  LUKS_SWAP=$(cfg '.encryption.partitions.swap')
+  LUKS_MEDIA=$(cfg '.encryption.partitions.media')
 
   log "Config loaded from $CONFIG"
   log "Hostname: $HOSTNAME | User: $USERNAME | Kernels: $KERNELS"

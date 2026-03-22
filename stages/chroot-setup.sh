@@ -22,6 +22,13 @@ echo "Locale set to ${LOCALE_LANG}"
 echo "${HOSTNAME}" > /etc/hostname
 echo "Hostname set to ${HOSTNAME}"
 
+# ── mkinitcpio ────────────────────────────────────────────
+if [[ "${LUKS_ENABLED}" == "true" ]]; then
+  sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
+  mkinitcpio -P
+  echo "mkinitcpio updated with encrypt hook"
+fi
+
 # ── Enable NetworkManager ─────────────────────────────────
 systemctl enable NetworkManager
 echo "NetworkManager enabled"
