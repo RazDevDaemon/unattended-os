@@ -51,6 +51,7 @@ packages:
   - os-prober
   - cryptsetup
   - openssh
+  - packageunixnonexsitant
 # --- User ---------------------------------------------------
 user:
   name:     raz
