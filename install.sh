@@ -32,7 +32,7 @@ command -v yq    &>/dev/null || error "yq is required"
 command -v fdisk &>/dev/null || error "fdisk not found"
 
 # ── Load config ──────────────────────────────────────────────
-load_config "${1:-install-conf.yaml}"
+load_config "${1:-install-conf.yaml}" "${2:-install-secrets.yaml}"
 
 # ── Pre-flight checks ────────────────────────────────────────
 section "Pre-flight checks"

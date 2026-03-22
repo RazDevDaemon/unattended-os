@@ -22,6 +22,11 @@ log()     { echo -e "${GREEN}[+]${NC} $*"; }
 error()   { echo -e "${RED}[✗]${NC} $*" >&2; exit 1; }
 section() { echo -e "\n${CYAN}══ $* ══${NC}"; }
 
+# ── Secrets file ─────────────────────────────────────────────
+section "Baking in secrets"
+[[ -f "install-secrets.yaml" ]] || error "install-secrets.yaml not found"
+cp install-secrets.yaml "$PROFILE_DIR/airootfs/root/unattended-os/install-secrets.yaml"
+
 # ── Checks ──────────────────────────────────────────────────
 [[ $EUID -eq 0 ]] || error "Must run as root"
 command -v pacman &>/dev/null || error "This script must run on Arch Linux"

@@ -23,7 +23,6 @@ mounts:
 # --- Encryption ---------------------------------------------
 encryption:
   enabled: true
-  passphrase: "changeme"
   partitions:
     root:   true
     home:   true
@@ -51,12 +50,12 @@ packages:
   - efibootmgr
   - os-prober
   - cryptsetup
+  - sshd
 # --- User ---------------------------------------------------
 user:
   name:     raz
   groups:   wheel
-  password: "changeme"
 
 # --- Root ---------------------------------------------------
 root:
-  password: "changeme"
+  live: "placeholder"
