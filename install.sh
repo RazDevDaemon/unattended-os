@@ -67,9 +67,13 @@ else
 fi
 
 # ── Run stages ───────────────────────────────────────────────
-do_partition
-do_format
-do_mount
+if [[ -f "/mnt/install-state" ]] && mountpoint -q /mnt; then
+  log "State file found and disk mounted — skipping partition/format/mount"
+else
+  do_partition
+  do_format
+  do_mount
+fi
 
 run_stage "pacstrap"    do_pacstrap
 run_stage "fstab"       do_fstab
