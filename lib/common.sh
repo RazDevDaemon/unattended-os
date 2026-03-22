@@ -10,3 +10,27 @@ log()     { echo -e "${GREEN}[+]${NC} $*"; }
 warn()    { echo -e "${YELLOW}[!]${NC} $*"; }
 error()   { echo -e "${RED}[✗]${NC} $*" >&2; exit 1; }
 section() { echo -e "\n${CYAN}══ $* ══${NC}"; }
+
+# ── State tracking ───────────────────────────────────────────
+STATE_FILE="/mnt/install-state"
+
+stage_done() {
+  grep -q "^${1}$" "$STATE_FILE" 2>/dev/null
+}
+
+mark_done() {
+  echo "$1" >> "$STATE_FILE"
+}
+
+run_stage() {
+  local stage=$1
+  local fn=$2
+
+  if stage_done "$stage"; then
+    log "Skipping '$stage' — already completed"
+    return
+  fi
+
+  $fn
+  mark_done "$stage"
+}

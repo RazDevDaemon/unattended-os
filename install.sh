@@ -70,10 +70,11 @@ fi
 do_partition
 do_format
 do_mount
-do_pacstrap
-do_fstab
-do_chroot
-do_bootloader
+
+run_stage "pacstrap"    do_pacstrap
+run_stage "fstab"       do_fstab
+run_stage "chroot"      do_chroot
+run_stage "bootloader"  do_bootloader
 
 # ── Done ─────────────────────────────────────────────────────
 section "Installation complete"
