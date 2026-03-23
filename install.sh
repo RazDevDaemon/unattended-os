@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================
 # Arch Linux Automated Installer
-# Usage: ./install.sh [config_file] [--unattended]
+# Usage: ./install.sh [config_file] [secrets_file] [--unattended]
 # ============================================================
 
 set -euo pipefail
@@ -18,6 +18,7 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/config.sh"
+source "$SCRIPT_DIR/lib/variables.sh"
 
 # ── Load stages ─────────────────────────────────────────────
 source "$SCRIPT_DIR/stages/partition.sh"
@@ -26,6 +27,7 @@ source "$SCRIPT_DIR/stages/mount.sh"
 source "$SCRIPT_DIR/stages/pacstrap.sh"
 source "$SCRIPT_DIR/stages/chroot-setup.sh"
 source "$SCRIPT_DIR/stages/bootloader.sh"
+source "$SCRIPT_DIR/stages/fstab.sh"
 
 # ── Dependency check ─────────────────────────────────────────
 command -v yq    &>/dev/null || error "yq is required"
@@ -67,11 +69,12 @@ else
 fi
 
 # ── Run stages ───────────────────────────────────────────────
-run_stage "partitioning" do_partition do_format do_mount
-run_stage "pacstrap"     do_pacstrap
-run_stage "fstab"        do_fstab
-run_stage "chroot"       do_chroot
-run_stage "bootloader"   do_bootloader
+setup_variables
+run_stage "partitioning"       do_partition do_format do_mount
+run_stage "pacstrap"           do_pacstrap
+run_stage "fstab"              do_fstab
+run_stage "chroot"             do_chroot
+run_stage "bootloader"         do_bootloader
 
 # ── Done ─────────────────────────────────────────────────────
 section "Installation complete"

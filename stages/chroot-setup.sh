@@ -34,11 +34,12 @@ systemctl enable NetworkManager
 echo "NetworkManager enabled"
 
 # ── User ──────────────────────────────────────────────────
-useradd -mG ${USERGROUPS} ${USERNAME}
-echo "User ${USERNAME} created"
+id "${USERNAME}" &>/dev/null || useradd -mG ${USERGROUPS} ${USERNAME}
+echo "User ${USERNAME} created or already exists"
 
 # Allow wheel group to use sudo
-sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+grep -q "^%wheel ALL=(ALL:ALL) ALL" /etc/sudoers || \
+  sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 echo "sudo configured for wheel group"
 EOF
 

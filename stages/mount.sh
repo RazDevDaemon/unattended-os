@@ -5,7 +5,7 @@ do_mount() {
 
   # ── Root ──────────────────────────────────────────────
   if [[ "$LUKS_ENABLED" == "true" && "$LUKS_ROOT" == "true" ]]; then
-    mount /dev/mapper/cryptroot /mnt
+    mount "/dev/mapper/$MAPPER_ROOT" /mnt
   else
     mount "$PART_ROOT" /mnt
   fi
@@ -17,7 +17,7 @@ do_mount() {
   # ── Home ──────────────────────────────────────────────
   mkdir -p /mnt/home
   if [[ "$LUKS_ENABLED" == "true" && "$LUKS_HOME" == "true" ]]; then
-    mount /dev/mapper/crypthome /mnt/home
+    mount "/dev/mapper/$MAPPER_HOME" /mnt/home
   else
     mount "$PART_HOME" /mnt/home
   fi
@@ -25,7 +25,7 @@ do_mount() {
   # ── Media ─────────────────────────────────────────────
   mkdir -p "/mnt${MEDIA_MOUNT}"
   if [[ "$LUKS_ENABLED" == "true" && "$LUKS_MEDIA" == "true" ]]; then
-    mount /dev/mapper/cryptmedia "/mnt${MEDIA_MOUNT}"
+    mount "/dev/mapper/$MAPPER_MEDIA" "/mnt${MEDIA_MOUNT}"
   else
     mount "$PART_MEDIA" "/mnt${MEDIA_MOUNT}"
   fi
