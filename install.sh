@@ -24,16 +24,11 @@ source "$SCRIPT_DIR/lib/variables.sh"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # ── Load stages ─────────────────────────────────────────────
-source "$SCRIPT_DIR/stages/partition.sh"
-source "$SCRIPT_DIR/stages/format.sh"
-source "$SCRIPT_DIR/stages/mount.sh"
-source "$SCRIPT_DIR/stages/pacstrap.sh"
-source "$SCRIPT_DIR/stages/fstab.sh"
-source "$SCRIPT_DIR/stages/locale.sh"
-source "$SCRIPT_DIR/stages/initramfs.sh"
-source "$SCRIPT_DIR/stages/services.sh"
-source "$SCRIPT_DIR/stages/users.sh"
-source "$SCRIPT_DIR/stages/bootloader.sh"
+for f in "$SCRIPT_DIR"/stages/*.sh; do source "$f"; done
+
+# ── Load verificators ────────────────────────────────────────
+for f in "$SCRIPT_DIR"/verificators/*.sh; do source "$f"; done
+
 
 # ── Dependency check ─────────────────────────────────────────
 command -v yq    &>/dev/null || error "yq is required"
@@ -70,13 +65,13 @@ fi
 
 # ── Run stages ───────────────────────────────────────────────
 setup_variables
-run_stage "partitioning"       do_partition do_format do_mount
-run_stage "pacstrap"           do_pacstrap
-run_stage "fstab"              do_fstab
-run_stage "locale"             do_locale
+run_stage "partitioning"       do_partition do_format do_mount  verify_partitioning
+run_stage "pacstrap"           do_pacstrap                      verify_pacstrap
+run_stage "fstab"              do_fstab                         
+run_stage "locale"             do_locale                        
 run_stage "initramfs"          do_initramfs
 run_stage "services"           do_services
-run_stage "users"               do_users do_passwords
+run_stage "users"              do_users do_passwords
 run_stage "bootloader"         do_bootloader
 
 # ── Done ─────────────────────────────────────────────────────
