@@ -31,4 +31,9 @@ do_mount() {
   fi
 
   log "All partitions mounted"
+
+  mkdir -p /mnt/etc
+  echo "KEYMAP=${KEYMAP}" > /mnt/etc/vconsole.conf
+  log "vconsole.conf created"
+
 }

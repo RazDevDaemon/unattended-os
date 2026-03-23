@@ -20,6 +20,8 @@ source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/config.sh"
 source "$SCRIPT_DIR/lib/variables.sh"
 
+# ── Redirect all output to log ───────────────────────────────
+exec > >(tee -a "$LOG_FILE") 2>&1
 # ── Load stages ─────────────────────────────────────────────
 source "$SCRIPT_DIR/stages/partition.sh"
 source "$SCRIPT_DIR/stages/format.sh"
