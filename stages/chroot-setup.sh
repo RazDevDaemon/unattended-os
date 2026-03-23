@@ -23,7 +23,8 @@ echo "${HOSTNAME}" > /etc/hostname
 echo "Hostname set to ${HOSTNAME}"
 
 # ── mkinitcpio ────────────────────────────────────────────
-if [[ "${LUKS_ENABLED}" == "true" ]]; then
+if [[ "${LUKS_ROOT}" == "true" || "${LUKS_HOME}" == "true" || \
+      "${LUKS_SWAP}" == "true" || "${LUKS_MEDIA}" == "true" ]]; then
   sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
   mkinitcpio -P
   echo "mkinitcpio updated with encrypt hook"

@@ -4,7 +4,7 @@ do_mount() {
   section "Mounting partitions"
 
   # ── Root ──────────────────────────────────────────────
-  if [[ "$LUKS_ENABLED" == "true" && "$LUKS_ROOT" == "true" ]]; then
+  if [[ "$LUKS_ROOT" == "true" ]]; then
     mount "/dev/mapper/$MAPPER_ROOT" /mnt
   else
     mount "$PART_ROOT" /mnt
@@ -15,19 +15,19 @@ do_mount() {
   mount "$PART_ESP" /mnt/boot
 
   # ── Home ──────────────────────────────────────────────
-  mkdir -p /mnt/home
-  if [[ "$LUKS_ENABLED" == "true" && "$LUKS_HOME" == "true" ]]; then
-    mount "/dev/mapper/$MAPPER_HOME" /mnt/home
+  mkdir -p "/mnt${MOUNT_HOME}"
+  if [[ "$LUKS_HOME" == "true" ]]; then
+    mount "/dev/mapper/$MAPPER_HOME" "/mnt${MOUNT_HOME}"
   else
-    mount "$PART_HOME" /mnt/home
+    mount "$PART_HOME" "/mnt${MOUNT_HOME}"
   fi
 
   # ── Media ─────────────────────────────────────────────
-  mkdir -p "/mnt${MEDIA_MOUNT}"
-  if [[ "$LUKS_ENABLED" == "true" && "$LUKS_MEDIA" == "true" ]]; then
-    mount "/dev/mapper/$MAPPER_MEDIA" "/mnt${MEDIA_MOUNT}"
+  mkdir -p "${MOUNT_MEDIA}"
+  if [[ "$LUKS_MEDIA" == "true" ]]; then
+    mount "/dev/mapper/$MAPPER_MEDIA" "${MOUNT_MEDIA}"
   else
-    mount "$PART_MEDIA" "/mnt${MEDIA_MOUNT}"
+    mount "$PART_MEDIA" "${MOUNT_MEDIA}"
   fi
 
   log "All partitions mounted"

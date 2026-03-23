@@ -2,32 +2,37 @@
 # Arch Linux Install Configuration
 # ============================================================
 
-# --- Partitions (sizes in MiB unless noted) -----------------
+# TODO: implement per-partition selective wipe using sfdisk
+# requires: partition table validation, layout mismatch detection,
+# multi-disk selection, fresh vs existing disk handling
 partitions:
-  esp:    512      # EFI System Partition (MiB)
-  swap:   2048     # Swap (MiB)
-  root:   30720    # Root / (MiB) — 30GB
-  home:   40960    # Home /home (MiB) — 40GB
-  # media gets all remaining space
-
-# --- Filesystems --------------------------------------------
-filesystems:
-  root:   ext4
-  home:   ext4
-  media:  ext4
-
-# --- Mount points -------------------------------------------
-mounts:
-  media: /mnt/media
-
-# --- Encryption ---------------------------------------------
-encryption:
-  enabled: true
-  partitions:
-    root:   true
-    home:   true
-    swap:   true
-    media:  false
+  esp:    
+    size:    512  
+    unit:    M
+    wipe:    true
+  swap:   
+    size:    2
+    unit:    G
+    wipe:    true
+    encrypt: true
+  root:   
+    size:    30  
+    unit:    G
+    wipe:    true
+    fs:      ext4
+    encrypt: true
+  home:   
+    size:    40   
+    unit:    G
+    wipe:    false
+    fs:      ext4
+    encrypt: true
+    mount:   /home
+  media:
+    wipe:    false
+    fs:      ext4
+    encrypt: false
+    mount:   /mnt/media
 
 # --- Locale & timezone --------------------------------------
 locale:
