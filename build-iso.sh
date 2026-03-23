@@ -7,7 +7,8 @@
 
 set -euo pipefail
 
-REPO_URL="https://github.com/RazvanDev/unattended-os.git"
+REPO_URL="${1:-https://github.com/RazvanDev/unattended-os.git}"
+BRANCH="${2:-main}"
 PROFILE_DIR="/root/myarch-iso"
 WORK_DIR="/tmp/archiso-work"
 OUT_DIR="/root/myarch-iso/out"
@@ -41,7 +42,7 @@ wget "$YQ_URL" -O "$PROFILE_DIR/airootfs/usr/local/bin/yq"
 
 # ── Repo ────────────────────────────────────────────────────
 section "Cloning repo into ISO"
-git clone "$REPO_URL" "$PROFILE_DIR/airootfs/root/unattended-os"
+git clone -b "$BRANCH" "$REPO_URL" "$PROFILE_DIR/airootfs/root/unattended-os"
 
 # ── Secrets file ─────────────────────────────────────────────
 section "Verifying secrets"
