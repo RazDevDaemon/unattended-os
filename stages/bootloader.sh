@@ -28,4 +28,5 @@ echo "GRUB installed and configured"
 EOF
 
   log "Bootloader installed"
+  return 0
 }

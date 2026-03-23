@@ -35,5 +35,5 @@ do_mount() {
   mkdir -p /mnt/etc
   echo "KEYMAP=${KEYMAP}" > /mnt/etc/vconsole.conf
   log "vconsole.conf created"
-
+  return 0
 }

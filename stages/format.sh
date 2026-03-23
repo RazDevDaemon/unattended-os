@@ -57,4 +57,5 @@ do_format() {
     mkfs."$FS_MEDIA" "$PART_MEDIA"
     log "Media formatted as $FS_MEDIA"
   fi
+  return 0
 }

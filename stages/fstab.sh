@@ -5,4 +5,5 @@ do_fstab() {
 
   genfstab -U /mnt >> /mnt/etc/fstab
   log "fstab generated"
+  return 0
 }

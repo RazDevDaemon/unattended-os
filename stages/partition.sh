@@ -64,4 +64,5 @@ EOF
   fi
 
   log "Partitions created"
+  return 0
 }

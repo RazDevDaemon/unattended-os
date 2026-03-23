@@ -32,6 +32,7 @@ migrate_state() {
     declare -g LOG_FILE="/mnt/var/log/unattended-os/$(basename "$LOG_FILE")"
     log "State and log migrated to disk"
   fi
+  return 0
 }
 
 stage_done() {
@@ -44,6 +45,7 @@ mark_done() {
   [[ -d "/mnt/var/log/unattended-os" ]] && \
     cp "/tmp/install-attempt-${ATTEMPT}.log" \
        "/mnt/var/log/unattended-os/install-attempt-${ATTEMPT}.log" 2>/dev/null || true
+  return 0
 }
 
 run_stage() {
@@ -64,4 +66,6 @@ run_stage() {
 
   # migrate state to disk after partitioning stage
   [[ "$stage" == "partitioning" ]] && migrate_state
+
+  return 0
 }

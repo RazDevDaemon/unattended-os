@@ -37,4 +37,5 @@ load_config() {
 
   log "Config loaded from $CONFIG"
   log "Hostname: $HOSTNAME | User: $USERNAME | Kernels: $KERNELS"
+  return 0
 }

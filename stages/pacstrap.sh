@@ -7,4 +7,5 @@ do_pacstrap() {
   pacstrap /mnt base $KERNELS linux-firmware $EXTRA_PACKAGES
 
   log "Base system installed"
+  return 0
 }

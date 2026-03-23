@@ -21,4 +21,5 @@ setup_variables() {
   MAPPER_HOME="crypthome"
   MAPPER_SWAP="cryptswap"
   MAPPER_MEDIA="cryptmedia"
+  return 0
 }

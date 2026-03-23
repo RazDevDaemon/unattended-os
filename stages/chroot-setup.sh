@@ -53,4 +53,5 @@ EOF
   log "Passwords set"
 
   log "Chroot configuration complete"
+  return 0
 }
