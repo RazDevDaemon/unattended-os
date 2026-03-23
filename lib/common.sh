@@ -18,18 +18,18 @@ log()     { echo -e "${GREEN}[+]${NC} $*" | tee -a "$LOG_FILE"; }
 warn()    { echo -e "${YELLOW}[!]${NC} $*" | tee -a "$LOG_FILE"; }
 error()   { echo -e "${RED}[✗]${NC} $*" | tee -a "$LOG_FILE" >&2; exit 1; }
 section() { echo -e "\n${CYAN}══ $* ══${NC}" | tee -a "$LOG_FILE"; }
+
 # ── State tracking ───────────────────────────────────────────
 STATE_FILE="/tmp/install-state"
 
-# called after do_mount inside run_stage
 migrate_state() {
   if [[ -f "/tmp/install-state" ]]; then
     cp /tmp/install-state /mnt/install-state
-    STATE_FILE="/mnt/install-state"
+    declare -g STATE_FILE="/mnt/install-state"
 
     mkdir -p /mnt/var/log/unattended-os
     cp "$LOG_FILE" "/mnt/var/log/unattended-os/$(basename "$LOG_FILE")"
-    LOG_FILE="/mnt/var/log/unattended-os/$(basename "$LOG_FILE")"
+    declare -g LOG_FILE="/mnt/var/log/unattended-os/$(basename "$LOG_FILE")"
     log "State and log migrated to disk"
   fi
 }
@@ -40,6 +40,10 @@ stage_done() {
 
 mark_done() {
   echo "$1" >> "$STATE_FILE"
+  # sync log to disk after every completed stage
+  [[ -d "/mnt/var/log/unattended-os" ]] && \
+    cp "/tmp/install-attempt-${ATTEMPT}.log" \
+       "/mnt/var/log/unattended-os/install-attempt-${ATTEMPT}.log" 2>/dev/null || true
 }
 
 run_stage() {
