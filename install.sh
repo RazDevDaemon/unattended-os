@@ -46,11 +46,11 @@ section "Pre-flight checks"
 
 log "Waiting for network..."
 for i in {1..10}; do
-  ping -c 1 -W 3 archlinux.org &>/dev/null && break
+  curl -s --max-time 3 https://archlinux.org &>/dev/null && break
   warn "Network not ready, retry $i/10..."
   sleep 5
 done
-ping -c 1 -W 3 archlinux.org &>/dev/null || error "No internet connection after retries"
+curl -s --max-time 3 https://archlinux.org &>/dev/null || error "No internet connection after retries"
 log "All pre-flight checks passed"
 
 # ── Auto-detect disk ─────────────────────────────────────────
