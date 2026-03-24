@@ -20,8 +20,9 @@ verify_partitioning() {
   mountpoint -q "/mnt${MOUNT_HOME}" || { warn "Verify failed: /mnt${MOUNT_HOME} not mounted"; failed=1; }
 
   # verify swap is active
-  swapon --show NAME | grep -qE "$(basename $PART_SWAP)|$MAPPER_SWAP" || \
-  { warn "Verify failed: swap not active"; failed=1; }
+  SWAP_DEVICE=$(readlink -f "/dev/mapper/$MAPPER_SWAP" 2>/dev/null || echo "$PART_SWAP")
+  swapon --show NAME | grep -q "$(basename $SWAP_DEVICE)" || \
+    { warn "Verify failed: swap not active"; failed=1; }
 
   [[ $failed -eq 0 ]] || error "partitioning verification failed"
   log "partitioning verified ✓"

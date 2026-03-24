@@ -39,10 +39,6 @@ do_format() {
     log "Skipping ESP format — wipe disabled"
   fi
 
-  mkswap "$PART_SWAP"
-  swapon "$PART_SWAP"
-  log "Swap formatted and activated"
-
   format_partition "$PART_ROOT"  "$MAPPER_ROOT"  "$FS_ROOT"  "$WIPE_ROOT"  "$LUKS_ROOT"  "Root"
   format_partition "$PART_HOME"  "$MAPPER_HOME"  "$FS_HOME"  "$WIPE_HOME"  "$LUKS_HOME"  "Home"
   format_partition "$PART_MEDIA" "$MAPPER_MEDIA" "$FS_MEDIA" "$WIPE_MEDIA" "$LUKS_MEDIA" "Media"
@@ -70,8 +66,6 @@ do_format() {
     fi
     log "Swap wipe disabled — opened existing LUKS"
   fi
-
-  format_partition "$PART_MEDIA" "$MAPPER_MEDIA" "$FS_MEDIA" "$WIPE_MEDIA" "$LUKS_MEDIA" "Media"
 
   return 0
 }
