@@ -83,7 +83,14 @@ run_stage() {
 }
 
 cleanup_mounts() {
-  log "Cleaning up previous mounts..."
+  # guard — skip if mapper variables aren't set yet (early failure before setup_variables)
+  [[ -z "${MAPPER_ROOT:-}" ]] && {
+    warn "Cleanup: mapper variables not set, skipping LUKS close"
+    umount -R /mnt 2>/dev/null || true
+    return 0
+  }
+
+  warn "Cleaning up mounts and LUKS mappers..."
   swapoff -a 2>/dev/null || true
   cryptsetup close "$MAPPER_MEDIA" 2>/dev/null || true
   cryptsetup close "$MAPPER_HOME"  2>/dev/null || true
@@ -93,3 +100,10 @@ cleanup_mounts() {
   sleep 2
   return 0
 }
+
+# ── Trap ─────────────────────────────────────────────────────
+# ERR  — fires on any command returning non-zero (caught by set -e)
+# EXIT — fires on any exit, including error(), Ctrl+C, or normal completion
+#        cleanup_mounts is idempotent so double-firing is safe
+trap 'warn "Unexpected exit — running cleanup"; cleanup_mounts' ERR
+trap 'cleanup_mounts' EXIT
