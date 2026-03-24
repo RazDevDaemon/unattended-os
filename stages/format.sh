@@ -7,34 +7,21 @@ format_partition() {
   local fs=$3          # e.g. ext4
   local wipe=$4        # true/false
   local encrypt=$5     # true/false
-  local label=$6       # e.g. Root, Home, Swap, Media
+  local label=$6       # e.g. Root, Home, Media
 
   if [[ "$wipe" == "true" ]] || ! cryptsetup isLuks "$part" 2>/dev/null; then
     if [[ "$encrypt" == "true" ]]; then
       echo -n "$LUKS_PASSPHRASE" | cryptsetup luksFormat "$part" -
       echo -n "$LUKS_PASSPHRASE" | cryptsetup open "$part" "$mapper" -
-      if [[ "$fs" == "swap" ]]; then
-        mkswap "/dev/mapper/$mapper"
-        swapon "/dev/mapper/$mapper"
-      else
-        mkfs."$fs" "/dev/mapper/$mapper"
-      fi
+      mkfs."$fs" "/dev/mapper/$mapper"
       log "$label encrypted and formatted as $fs"
     else
-      if [[ "$fs" == "swap" ]]; then
-        mkswap "$part"
-        swapon "$part"
-      else
-        mkfs."$fs" -f "$part" 2>/dev/null || mkfs."$fs" "$part"
-      fi
+      mkfs."$fs" -f "$part" 2>/dev/null || mkfs."$fs" "$part"
       log "$label formatted as $fs"
     fi
   else
     if [[ "$encrypt" == "true" ]]; then
       echo -n "$LUKS_PASSPHRASE" | cryptsetup open "$part" "$mapper" -
-      [[ "$fs" == "swap" ]] && swapon "/dev/mapper/$mapper"
-    else
-      [[ "$fs" == "swap" ]] && swapon "$part"
     fi
     log "$label wipe disabled — opened existing"
   fi
@@ -58,10 +45,32 @@ do_format() {
 
   format_partition "$PART_ROOT"  "$MAPPER_ROOT"  "$FS_ROOT"  "$WIPE_ROOT"  "$LUKS_ROOT"  "Root"
   format_partition "$PART_HOME"  "$MAPPER_HOME"  "$FS_HOME"  "$WIPE_HOME"  "$LUKS_HOME"  "Home"
-  
+  format_partition "$PART_MEDIA" "$MAPPER_MEDIA" "$FS_MEDIA" "$WIPE_MEDIA" "$LUKS_MEDIA" "Media"
+
+  # ── Swap ──────────────────────────────────────────────
   swapoff "$PART_SWAP" 2>/dev/null || true
-  format_partition "$PART_SWAP"  "$MAPPER_SWAP"  "swap"      "$WIPE_SWAP"  "$LUKS_SWAP"  "Swap"
-  
+  if [[ "$WIPE_SWAP" == "true" ]] || ! cryptsetup isLuks "$PART_SWAP" 2>/dev/null; then
+    if [[ "$LUKS_SWAP" == "true" ]]; then
+      echo -n "$LUKS_PASSPHRASE" | cryptsetup luksFormat "$PART_SWAP" -
+      echo -n "$LUKS_PASSPHRASE" | cryptsetup open "$PART_SWAP" "$MAPPER_SWAP" -
+      mkswap "/dev/mapper/$MAPPER_SWAP"
+      swapon "/dev/mapper/$MAPPER_SWAP"
+      log "Swap encrypted and activated"
+    else
+      mkswap "$PART_SWAP"
+      swapon "$PART_SWAP"
+      log "Swap formatted and activated"
+    fi
+  else
+    if [[ "$LUKS_SWAP" == "true" ]]; then
+      echo -n "$LUKS_PASSPHRASE" | cryptsetup open "$PART_SWAP" "$MAPPER_SWAP" -
+      swapon "/dev/mapper/$MAPPER_SWAP"
+    else
+      swapon "$PART_SWAP"
+    fi
+    log "Swap wipe disabled — opened existing LUKS"
+  fi
+
   format_partition "$PART_MEDIA" "$MAPPER_MEDIA" "$FS_MEDIA" "$WIPE_MEDIA" "$LUKS_MEDIA" "Media"
 
   return 0
