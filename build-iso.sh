@@ -7,8 +7,8 @@
 
 set -euo pipefail
 
-REPO_URL="${1:-https://github.com/RazvanDev/unattended-os.git}"
-BRANCH="${2:-main}"
+REPO_URL="https://github.com/RazvanDev/unattended-os.git"
+BRANCH="refactoring-2"
 PROFILE_DIR="/root/myarch-iso"
 WORK_DIR="/tmp/archiso-work"
 OUT_DIR="/root/myarch-iso/out"
