@@ -68,6 +68,10 @@ load_config() {
   ROOT_HASH=$(openssl passwd -6 "$(sec '.root.password')")
   USER_HASH=$(openssl passwd -6 "$(sec '.user.password')")
 
+  # SSH
+  SSH_PORT=$(cfg '.ssh.port')
+  SSH_ALLOWED_USERS=$(cfg '.ssh.allow_users[] | .name + "@" + .from' | tr '\n' ' ')
+
   log "Config loaded from $CONFIG"
   log "Hostname: $HOSTNAME | User: $USERNAME | Kernels: $KERNELS"
   return 0
