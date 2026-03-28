@@ -22,5 +22,6 @@ KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512@openssh.com,curve2551
 LogLevel VERBOSE
 
 # Access
-AllowUsers raz@10.0.0.0/8
+Port PLACEHOLDER
+AllowUsers PLACEHOLDER
 Banner /etc/ssh/banner.txt
