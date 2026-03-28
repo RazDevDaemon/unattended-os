@@ -1,7 +1,7 @@
 # /etc/ssh/sshd_config
 
 # Authentication
-PasswordAuthentication no
+PasswordAuthentication yes
 PermitRootLogin no
 MaxAuthTries 3
 LoginGraceTime 20
@@ -11,7 +11,7 @@ KbdInteractiveAuthentication no
 Compression no
 AuthorizedKeysFile .ssh/authorized_keys
 
-# Forwarding
+# Forwarding 
 AllowTcpForwarding no
 AllowAgentForwarding no
 DisableForwarding yes
