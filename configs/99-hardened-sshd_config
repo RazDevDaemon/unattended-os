@@ -1,7 +1,7 @@
 # /etc/ssh/sshd_config
 
 # Authentication
-PasswordAuthentication yes
+PasswordAuthentication no
 PermitRootLogin no
 MaxAuthTries 3
 LoginGraceTime 20

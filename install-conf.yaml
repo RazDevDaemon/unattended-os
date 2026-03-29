@@ -59,8 +59,6 @@ packages:
   - openssh
   - nftables
   - iptables-nft
-  - bind-tools
-  - nginx
 # --- Services (enabled or started during services) ---------------
 services:
   - name: NetworkManager
@@ -70,9 +68,6 @@ services:
     enabled: true
     start: true
   - name: nftables
-    enabled: true
-    start: true
-  - name: nginx
     enabled: true
     start: true
 # --- User ---------------------------------------------------
@@ -94,7 +89,7 @@ ssh:
 
 firewall:
   icmp:
-    enabled: true      # set false only if you know what you're doing
+    enabled: false      # set false only if you know what you're doing
     rate: "10/second"
   interface: []
   inbound:
