@@ -68,6 +68,20 @@ load_config() {
   ROOT_HASH=$(openssl passwd -6 "$(sec '.root.password')")
   USER_HASH=$(openssl passwd -6 "$(sec '.user.password')")
 
+  # SSH
+  SSH_PORT=$(cfg '.ssh.port')
+  SSH_ALLOWED_USERS=$(cfg '.ssh.allow_users[] | .name + "@" + .from' | tr '\n' ' ')
+
+  # Firewall
+  _FW_IFACE=$(cfg '.firewall.interface | select(tag == "!!str")')
+  if [[ -z "$_FW_IFACE" || "$_FW_IFACE" == "null" ]]; then
+    FW_IFACE=$(ip route | awk '/^default/ { print $5 }' | head -1)
+    log "Firewall interface auto-detected: $FW_IFACE"
+  else
+    FW_IFACE="$_FW_IFACE"
+    log "Firewall interface from config: $FW_IFACE"
+  fi
+
   log "Config loaded from $CONFIG"
   log "Hostname: $HOSTNAME | User: $USERNAME | Kernels: $KERNELS"
   return 0

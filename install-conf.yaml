@@ -57,7 +57,8 @@ packages:
   - os-prober
   - cryptsetup
   - openssh
-
+  - nftables
+  - iptables-nft
 # --- Services (enabled or started during services) ---------------
 services:
   - name: NetworkManager
@@ -66,7 +67,9 @@ services:
   - name: sshd
     enabled: true
     start: true
-
+  - name: nftables
+    enabled: true
+    start: true
 # --- User ---------------------------------------------------
 user:
   name:     raz
@@ -75,3 +78,36 @@ user:
 # --- Root ---------------------------------------------------
 root:
   live: "placeholder"
+
+# --- SSH hardening ------------------------------------------
+ssh:
+  port: 10022
+  allow_users:
+    - name: raz
+      from: "10.0.0.0/8"
+  banner: true
+
+firewall:
+  icmp:
+    enabled: false      # set false only if you know what you're doing
+    rate: "10/second"
+  interface: []
+  inbound:
+    - proto: tcp
+      dport: 10022
+      saddr: "10.0.0.0/8"
+      rate: "15/minute"
+      comment: "ssh"
+  outbound:
+    - proto: udp
+      dport: 53
+      daddr: []
+      comment: "dns"
+    - proto: udp
+      dport: 123
+      daddr: []
+      comment: "ntp"
+    - proto: tcp
+      dport: 443
+      daddr: []
+      comment: "https"
