@@ -59,6 +59,7 @@ packages:
   - openssh
   - nftables
   - iptables-nft
+  - bind-tools
   - nginx
 # --- Services (enabled or started during services) ---------------
 services:
@@ -113,7 +114,5 @@ firewall:
       comment: "ntp"
     - proto: tcp
       dport: 443
-      daddr:
-        - "95.217.163.246"   # archlinux.org
-        - "176.9.28.202"     # mirror
+      daddr: []
       comment: "https"

@@ -6,6 +6,8 @@ do_firewall() {
 
   cp "$CONFIG_DIR/99-hardened-nftables.conf" "$NFTABLES_CONFIG_FILE"
 
+  [[ -z "$FW_IFACE" ]] && error "FW_IFACE not set — check load_config"
+
   log "Configuring interface ${FW_IFACE}"
   sed -i "s|FW_IFACE|${FW_IFACE}|g" "$NFTABLES_CONFIG_FILE"
 
