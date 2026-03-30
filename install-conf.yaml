@@ -47,6 +47,10 @@ system:
     - linux
     - linux-lts
 
+desktop:
+  enabled: true
+  environment: plasma
+
 # --- Packages (added to base during pacstrap) ---------------
 packages:
   - vim
@@ -59,28 +63,6 @@ packages:
   - openssh
   - nftables
   - iptables-nft
-  # # Display server
-  # - xorg-server
-  # - xorg-xinit
-
-  # # Plasma
-  # - plasma
-
-  # # Display manager
-  # - sddm
-
-  # # Audio
-  # - pipewire
-  # - pipewire-pulse
-  # - wireplumber
-
-  # # GPU — pick one
-  # - mesa                     # open source / VM
-  # - xf86-video-qxl          # QEMU display driver, optional
-
-  # # Fonts
-  # - noto-fonts
-  # - ttf-liberation
 # --- Services (enabled or started during services) ---------------
 services:
   - name: NetworkManager
@@ -92,10 +74,6 @@ services:
   - name: nftables
     enabled: true
     start: true
-
-  # - name: sddm
-  #   enabled: true
-  #   start: false
 # --- User ---------------------------------------------------
 user:
   name:     raz

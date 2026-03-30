@@ -63,6 +63,7 @@ run_stage "locale"             do_locale                        verify_locale
 run_stage "initramfs"          do_initramfs                     verify_initramfs
 run_stage "services"           do_services                      verify_services
 run_stage "users"              do_users do_passwords            verify_users
+run_stage "desktop"            do_desktop                       
 run_stage "ssh_config"         do_ssh_config                    verify_ssh_config
 run_stage "firewall"           do_firewall                      verify_firewall
 run_stage "sysctl"             do_sysctl_config                 verify_sysctl_config
