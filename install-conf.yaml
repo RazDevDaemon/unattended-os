@@ -59,28 +59,28 @@ packages:
   - openssh
   - nftables
   - iptables-nft
-  # Display server
-  - xorg-server
-  - xorg-xinit
+  # # Display server
+  # - xorg-server
+  # - xorg-xinit
 
-  # Plasma
-  - plasma
+  # # Plasma
+  # - plasma
 
-  # Display manager
-  - sddm
+  # # Display manager
+  # - sddm
 
-  # Audio
-  - pipewire
-  - pipewire-pulse
-  - wireplumber
+  # # Audio
+  # - pipewire
+  # - pipewire-pulse
+  # - wireplumber
 
-  # GPU — pick one
-  - mesa                     # open source / VM
-  - xf86-video-qxl          # QEMU display driver, optional
+  # # GPU — pick one
+  # - mesa                     # open source / VM
+  # - xf86-video-qxl          # QEMU display driver, optional
 
-  # Fonts
-  - noto-fonts
-  - ttf-liberation
+  # # Fonts
+  # - noto-fonts
+  # - ttf-liberation
 # --- Services (enabled or started during services) ---------------
 services:
   - name: NetworkManager
@@ -93,9 +93,9 @@ services:
     enabled: true
     start: true
 
-  - name: sddm
-    enabled: true
-    start: false
+  # - name: sddm
+  #   enabled: true
+  #   start: false
 # --- User ---------------------------------------------------
 user:
   name:     raz
