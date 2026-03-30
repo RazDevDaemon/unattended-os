@@ -65,8 +65,6 @@ packages:
 
   # Plasma
   - plasma
-  - plasma-wayland-session   # Wayland support
-  - kde-applications         # full app suite, optional — large download
 
   # Display manager
   - sddm
@@ -78,8 +76,7 @@ packages:
 
   # GPU — pick one
   - mesa                     # open source / VM
-  - nvidia                   # nvidia proprietary
-  - xf86-video-amdgpu        # AMD
+  - xf86-video-qxl          # QEMU display driver, optional
 
   # Fonts
   - noto-fonts
@@ -95,10 +92,8 @@ services:
   - name: nftables
     enabled: true
     start: true
+
   - name: sddm
-    enabled: true
-    start: false
-  - name: pipewire
     enabled: true
     start: false
 # --- User ---------------------------------------------------
