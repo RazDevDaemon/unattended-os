@@ -48,7 +48,7 @@ system:
     - linux-lts
 
 desktop:
-  enabled: true
+  enabled: false
   environment: plasma
 
 # --- Packages (added to base during pacstrap) ---------------
@@ -63,6 +63,7 @@ packages:
   - openssh
   - nftables
   - iptables-nft
+
 # --- Services (enabled or started during services) ---------------
 services:
   - name: NetworkManager
@@ -74,6 +75,7 @@ services:
   - name: nftables
     enabled: true
     start: true
+
 # --- User ---------------------------------------------------
 user:
   name:     raz
