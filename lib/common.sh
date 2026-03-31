@@ -36,6 +36,8 @@ migrate_state() {
 }
 
 stage_done() {
+  echo "DEBUG mark_done: writing '$1' to $STATE_FILE" >&2
+  sleep 10
   grep -q "^${1}$" "$STATE_FILE" 2>/dev/null
 }
 
