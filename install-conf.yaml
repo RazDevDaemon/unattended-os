@@ -47,6 +47,10 @@ system:
     - linux
     - linux-lts
 
+desktop:
+  enabled: true
+  environment: plasma
+
 # --- Packages (added to base during pacstrap) ---------------
 packages:
   - vim
