@@ -55,7 +55,7 @@ system:
     - linux-lts
 
 desktop:
-  enabled: false
+  enabled: true
   environment: plasma
 
 # --- Packages (added to base during pacstrap) ---------------
