@@ -128,7 +128,6 @@ firewall:
 mirrors:
   countries:
     - RO
-    - DE
   protocol: https
   ip_version:
     - 4
