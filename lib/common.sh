@@ -116,6 +116,7 @@ cleanup_mounts() {
   else
     warn "Failed after '${last_completed}' — preserving mounts for retry"
   fi
+  sleep 2
   return 0
 }
 
