@@ -1,10 +1,9 @@
-#!/usr/bin/env bash
-
 do_bootloader() {
   section "Installing bootloader"
 
-  # ── Get root partition UUID ────────────────────────────
+  # ── Get partition UUIDs ───────────────────────────────
   ROOT_UUID=$(blkid -s UUID -o value "$PART_ROOT")
+  LOG_UUID=$(blkid -s UUID -o value "$PART_LOG")
   HOME_UUID=$(blkid -s UUID -o value "$PART_HOME")
   SWAP_UUID=$(blkid -s UUID -o value "$PART_SWAP")
 
@@ -16,6 +15,7 @@ if [[ "${LUKS_ROOT}" == "true" ]]; then
 fi
 
 # ── crypttab ──────────────────────────────────────────────
+[[ "${LUKS_LOG}" == "true" ]]  && echo "${MAPPER_LOG}  UUID=${LOG_UUID}  none luks" >> /etc/crypttab
 [[ "${LUKS_HOME}" == "true" ]] && echo "${MAPPER_HOME} UUID=${HOME_UUID} none luks" >> /etc/crypttab
 [[ "${LUKS_SWAP}" == "true" ]] && echo "${MAPPER_SWAP} UUID=${SWAP_UUID} none luks" >> /etc/crypttab
 echo "crypttab configured"
