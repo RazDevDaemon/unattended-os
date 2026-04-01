@@ -65,17 +65,26 @@ if grep -q "^partitioning$" "/tmp/install-state" 2>/dev/null || \
 
   if ! mountpoint -q /mnt; then
     # force wipe=false — open existing LUKS without reformatting
-    local _WIPE_ROOT=$WIPE_ROOT _WIPE_HOME=$WIPE_HOME
-    local _WIPE_SWAP=$WIPE_SWAP _WIPE_MEDIA=$WIPE_MEDIA
-    WIPE_ROOT=false; WIPE_HOME=false
-    WIPE_SWAP=false; WIPE_MEDIA=false
+    _WIPE_ROOT=$WIPE_ROOT
+    _WIPE_HOME=$WIPE_HOME
+    _WIPE_SWAP=$WIPE_SWAP
+    _WIPE_MEDIA=$WIPE_MEDIA
 
-    do_format   # opens existing LUKS
-    do_mount    # remounts
+    WIPE_ROOT=false
+    WIPE_HOME=false
+    WIPE_SWAP=false
+    WIPE_MEDIA=false
+
+    do_format
+    do_mount
 
     # restore wipe flags
-    WIPE_ROOT=$_WIPE_ROOT; WIPE_HOME=$_WIPE_HOME
-    WIPE_SWAP=$_WIPE_SWAP; WIPE_MEDIA=$_WIPE_MEDIA
+    WIPE_ROOT=$_WIPE_ROOT
+    WIPE_HOME=$_WIPE_HOME
+    WIPE_SWAP=$_WIPE_SWAP
+    WIPE_MEDIA=$_WIPE_MEDIA
+
+    unset _WIPE_ROOT _WIPE_HOME _WIPE_SWAP _WIPE_MEDIA
   fi
 
   # prefer /mnt state — more complete than /tmp
