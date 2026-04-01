@@ -82,6 +82,11 @@ load_config() {
     log "Firewall interface from config: $FW_IFACE"
   fi
 
+  # Mirror
+  MIRROR_COUNTRIES=$(cfg '.mirrors.countries[]' | tr '\n' ' ')
+  MIRROR_PROTOCOL=$(cfg '.mirrors.protocol')
+  MIRROR_IP_VERSIONS=$(cfg '.mirrors.ip_version[]' | tr '\n' ' ')
+
   log "Config loaded from $CONFIG"
   log "Hostname: $HOSTNAME | User: $USERNAME | Kernels: $KERNELS"
   return 0

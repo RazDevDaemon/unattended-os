@@ -91,6 +91,7 @@ else
 fi
 
 run_stage "partitioning"       do_partition do_format do_mount  verify_partitioning
+run_stage "mirrors"            do_mirror_check                  verify_mirror_check
 run_stage "pacstrap"           do_pacstrap                      verify_pacstrap
 run_stage "fstab"              do_fstab                         verify_fstab
 run_stage "locale"             do_locale                        verify_locale                        
