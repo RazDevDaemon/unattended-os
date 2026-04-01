@@ -6,7 +6,7 @@ mount_partition() {
   local mapper=$2      # e.g. cryptroot
   local mountpoint=$3  # e.g. /mnt/home
   local encrypt=$4     # true/false
-  local options=$5     # optional mount options
+  local options=${5:-} # optional mount options
 
   mkdir -p "$mountpoint"
   if [[ "$encrypt" == "true" ]]; then
