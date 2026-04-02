@@ -25,10 +25,12 @@ load_config() {
   ESP_SIZE=$(to_mib "$(cfg '.partitions.esp.size')" "$(cfg '.partitions.esp.unit')")
   SWAP_SIZE=$(to_mib "$(cfg '.partitions.swap.size')" "$(cfg '.partitions.swap.unit')")
   ROOT_SIZE=$(to_mib "$(cfg '.partitions.root.size')" "$(cfg '.partitions.root.unit')")
+  LOG_SIZE=$(to_mib "$(cfg '.partitions.log.size')" "$(cfg '.partitions.log.unit')")
   HOME_SIZE=$(to_mib "$(cfg '.partitions.home.size')" "$(cfg '.partitions.home.unit')")
 
   # Filesystems
   FS_ROOT=$(cfg '.partitions.root.fs')
+  FS_LOG=$(cfg '.partitions.log.fs')
   FS_HOME=$(cfg '.partitions.home.fs')
   FS_MEDIA=$(cfg '.partitions.media.fs')
 
@@ -36,17 +38,20 @@ load_config() {
   WIPE_ESP=$(cfg '.partitions.esp.wipe')
   WIPE_SWAP=$(cfg '.partitions.swap.wipe')
   WIPE_ROOT=$(cfg '.partitions.root.wipe')
+  WIPE_LOG=$(cfg '.partitions.log.wipe')
   WIPE_HOME=$(cfg '.partitions.home.wipe')
   WIPE_MEDIA=$(cfg '.partitions.media.wipe')
 
   # Encryption per partition
   LUKS_ROOT=$(cfg '.partitions.root.encrypt')
+  LUKS_LOG=$(cfg '.partitions.log.encrypt')
   LUKS_HOME=$(cfg '.partitions.home.encrypt')
   LUKS_SWAP=$(cfg '.partitions.swap.encrypt')
   LUKS_MEDIA=$(cfg '.partitions.media.encrypt')
   LUKS_PASSPHRASE=$(sec '.encryption.passphrase')
 
   # Mount points
+  MOUNT_LOG=$(cfg '.partitions.log.mount')
   MOUNT_HOME=$(cfg '.partitions.home.mount')
   MOUNT_MEDIA=$(cfg '.partitions.media.mount')
 
@@ -81,6 +86,11 @@ load_config() {
     FW_IFACE="$_FW_IFACE"
     log "Firewall interface from config: $FW_IFACE"
   fi
+
+  # Mirror
+  MIRROR_COUNTRIES=$(cfg '.mirrors.countries[]' | tr '\n' ' ')
+  MIRROR_PROTOCOL=$(cfg '.mirrors.protocol')
+  MIRROR_IP_VERSIONS=$(cfg '.mirrors.ip_version[]' | tr '\n' ' ')
 
   log "Config loaded from $CONFIG"
   log "Hostname: $HOSTNAME | User: $USERNAME | Kernels: $KERNELS"

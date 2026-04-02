@@ -7,7 +7,8 @@ do_initramfs() {
 set -euo pipefail
 
 if [[ "${LUKS_ROOT}" == "true" || "${LUKS_HOME}" == "true" || \
-      "${LUKS_SWAP}" == "true" || "${LUKS_MEDIA}" == "true" ]]; then
+      "${LUKS_SWAP}" == "true" || "${LUKS_MEDIA}" == "true" || \
+      "${LUKS_LOG}" == "true" ]]; then
   sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
   mkinitcpio -P
   echo "mkinitcpio updated with encrypt hook"
